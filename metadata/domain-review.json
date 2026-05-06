@@ -1,0 +1,73 @@
+{
+  "repo": "lattice-model-explain-grid",
+  "language": "Haskell",
+  "category": "ML utilities",
+  "goal": "Create a Haskell reference implementation for explain workflows, centered on constraint solving, bounded scenario files, and conflict explanations.",
+  "review_model": {
+    "terms": [
+      "feature drift",
+      "window width",
+      "metric stability",
+      "explainability"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "feature drift",
+      "signal": 40,
+      "slack": 41,
+      "drag": 30,
+      "confidence": 85,
+      "score": 116,
+      "lane": "watch"
+    },
+    {
+      "name": "stress",
+      "focus": "window width",
+      "signal": 53,
+      "slack": 30,
+      "drag": 13,
+      "confidence": 55,
+      "score": 152,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "metric stability",
+      "signal": 67,
+      "slack": 25,
+      "drag": 23,
+      "confidence": 85,
+      "score": 175,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "explainability",
+      "signal": 67,
+      "slack": 24,
+      "drag": 32,
+      "confidence": 92,
+      "score": 154,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "feature drift",
+      "signal": 85,
+      "slack": 35,
+      "drag": 15,
+      "confidence": 94,
+      "score": 254,
+      "lane": "ship"
+    }
+  ]
+}

@@ -1,68 +1,40 @@
 # lattice-model-explain-grid
 
-`lattice-model-explain-grid` explores ml utilities in Haskell. The repository keeps the core rule set compact, then surrounds it with examples that show how the decisions move.
+`lattice-model-explain-grid` is a compact Haskell repository for ml utilities, centered on this goal: Create a Haskell reference implementation for explain workflows, centered on constraint solving, bounded scenario files, and conflict explanations.
 
-## Lattice Model Explain Grid Notes
+## Why It Exists
 
-The quickest review path is the verifier first, then the fixtures, then the operations note. That order makes it easy to see whether the code, data, and explanation still agree.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how feature drift and metric stability should influence a review result.
 
-## Why This Exists
+## Lattice Model Explain Grid Review Notes
 
-I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+The first comparison I would make is `feature drift` against `feature drift` because it shows where the rule is most opinionated.
 
-## Feature Notes
+## Features
 
-- Models feature signals with deterministic scoring and explicit review decisions.
-- Uses fixture data to keep metric checks changes visible in code review.
-- Includes extended examples for windowed behavior, including `surge` and `degraded`.
-- Documents explainable outputs tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
+- `fixtures/domain_review.csv` adds cases for feature drift and window width.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/lattice-model-explain-walkthrough.md` walks through the case spread.
+- The Haskell code includes a review path for `feature drift` and `feature drift`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Implementation Notes
+## Architecture Notes
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying ml utilities behavior without needing a service or database unless the language project itself is SQL. The Haskell code keeps the pure scoring function isolated so tests can check it without setup.
+The fixture data drives the tests. The code stays thin, while `metadata/domain-review.json` and `config/review-profile.json` explain what each case is meant to protect.
 
-## Code Tour
+The Haskell addition stays small enough to inspect in one sitting.
 
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Local Setup
-
-Use a normal shell with Haskell available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Try It
+## Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
-
 ## Tests
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+The verifier is intentionally local. It should fail if the fixture score math, lane assignment, or language-specific test drifts.
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
+## Limitations And Roadmap
 
-## Example Scenarios
-
-`examples/extended_cases.csv` adds six named cases. I kept the names plain so failures are easy to read in a terminal: baseline, pressure, surge, degraded, recovery, and boundary.
-
-## Boundaries
-
-The scoring model is simple by design. More domain-specific behavior should be added through explicit adapters or extra fixture classes rather than hidden constants.
-
-## Roadmap
-
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add one more ml utilities fixture that focuses on a malformed or borderline input.
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.
